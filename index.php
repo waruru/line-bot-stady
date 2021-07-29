@@ -24,9 +24,9 @@
     //                       'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg');
 
     // 位置情報を返信
-    replyLocationMessage($bot, $event->getReplyToken(), '位置情報テスト',
-                          '石川県金沢市123-45',
-                          35.659025, 139.703473);
+    replyLocationMessage($bot, $event->getReplyToken(), 'CirKit ロゴス',
+                          '石川県野々市市 金沢工業大学 扇が丘キャンパス',
+                          36.530874, 136.627157);
   }
 
   // テキスト返信用関数
