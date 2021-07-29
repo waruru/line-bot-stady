@@ -24,9 +24,12 @@
     //                       'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg');
 
     // 位置情報を返信
-    replyLocationMessage($bot, $event->getReplyToken(), 'CirKit ロゴス',
-                          '石川県野々市市 金沢工業大学 扇が丘キャンパス',
-                          36.5308217, 136.6270967);
+    // replyLocationMessage($bot, $event->getReplyToken(), 'CirKit ロゴス',
+    //                       '石川県野々市市 金沢工業大学 扇が丘キャンパス',
+    //                       36.5308217, 136.6270967);
+
+    // スタンプを返信
+    replyStickerMessage($bot, $event->getReplyToken(), 11538, 51626498);
   }
 
   // テキスト返信用関数
@@ -50,6 +53,14 @@
   // 位置情報返信用関数
   function replyLocationMessage($bot, $replyToken, $title, $address, $lat, $lon) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($title, $address, $lat, $lon));
+
+    if(!$response->isSucceeded()) {
+      error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
+  // スタンプ返信用関数
+  function replyStickerMessage($bot, $replyToken, $packageId, $stickerId) {
+    $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($packageId, $stickerId));
 
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
