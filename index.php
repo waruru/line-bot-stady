@@ -1,10 +1,17 @@
 <?php
-  echo "Hello World!";
   // ライブラリ読み込み
   require_once __DIR__ . '/vendor/autoload.php';
 
-  // 値の取得
-  $inputString = file_get_contents('php://input');
-  echo $inputString;
-  error_log($inputString);
+  $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
+
+  $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
+
+  $signature = $_SERVER['HTTP_' . \LINE¥LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+
+  $events = $bot->parseEventRequest(file_get_contents('php://input'), $signature);
+
+  foreach($events as $event) {
+    // テキスト返信
+    $bot->replyText($event->getReplyToken(), 'TextMessage');
+  }
 ?>
