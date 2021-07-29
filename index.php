@@ -22,4 +22,12 @@
       error_log('Failed! '. $response->getHTTPStatus. ' '. $response->getRawBody());
     }
   }
+
+  function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUrl) {
+    $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($originalImageUrl, $previewImageUrl));
+
+    if(!$response->isSucceeded()) {
+      error_log('Failed! '. $response->getHTTPStatus. ' '. $response->getRawBody());
+    }
+  }
 ?>
