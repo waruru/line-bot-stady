@@ -12,7 +12,7 @@
 
   foreach($events as $event) {
     // テキスト返信
-    $bot->replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
+    replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
   }
 
   function replyTextMessage($bot, $replyToken, $text) {
