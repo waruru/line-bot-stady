@@ -15,16 +15,21 @@
   $events = $bot->parseEventRequest(file_get_contents('php://input'), $signature);
 
   foreach($events as $event) {
-    // テキスト返信
+    // テキストを返信
     // replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
 
-    // 画像返信
-    replyImageMessage($bot,
-                      $event->getReplyToken(),
-                      'https://' . $_SERVER['HTTP_HOST'] . '/imgs/original.jpg',
-                      'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg');
+    // 画像を返信
+    // replyImageMessage($bot, $event->getReplyToken(),
+    //                       'https://' . $_SERVER['HTTP_HOST'] . '/imgs/original.jpg',
+    //                       'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg');
+
+    // 位置情報を返信
+    replyLocationMessage($bot, $event->getReplyToken(), '位置情報テスト',
+                          '石川県金沢市123-45',
+                          35.659025, 139.703473);
   }
 
+  // テキスト返信用関数
   function replyTextMessage($bot, $replyToken, $text) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text));
 
@@ -33,11 +38,21 @@
     }
   }
 
+  // イメージ返信用関数
   function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUrl) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($originalImageUrl, $previewImageUrl));
 
     if(!$response->isSucceeded()) {
       error_log('Failed! '. $response->getHTTPStatus. ' '. $response->getRawBody());
+    }
+  }
+
+  // 位置情報返信用関数
+  function replyLocationMessage($bot, $replyToken, $title, $address, $lat, $lon) {
+    $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($title, $address, $lat, $lon));
+
+    if(!$response->isSucceeded()) {
+      error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
   }
 ?>
