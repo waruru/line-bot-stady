@@ -55,7 +55,7 @@
       'https://' . $_SERVER['HTTP_HOST'] . '/imgs/template.jpg',
       '天気の知らせ',
       '今日の天気予報は晴れ',
-      new LiIE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder('明日の天気', 'tomorrow'),
+      new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder ('明日の天気', 'tomorrow'),
       new LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder('週末の天気', 'weekend'),
       new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder('webで見る', 'https://google.jp')
     );
