@@ -41,17 +41,29 @@
     //                       'https://' . $_SERVER['HTTP_HOST'] . '/audios/sample2.m4a', 244000);
 
     // 複数のメッセージを返信
-    replyMultiMessage($bot, $event->getReplyToken(),
-        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('返信テスト'),
-        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder('https://' . $_SERVER['HTTP_HOST'] . '/imgs/original.jpg',
-                                                              'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg'),
-        new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(11538, 51626498));
+    // replyMultiMessage($bot, $event->getReplyToken(),
+    //     new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('返信テスト'),
+    //     new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder('https://' . $_SERVER['HTTP_HOST'] . '/imgs/original.jpg',
+    //                                                           'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg'),
+    //     new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(11538, 51626498));
+
+    // Buttonテンプレートメッセージを返信
+    replyButtonTemplate(
+      $bot,
+      $event->getReplyToken(),
+      '天気のお知らせ - 今日の天気予報',
+      'https://' . $_SERVER['HTTP_HOST'] . '/imgs/template.jpg',
+      '天気の知らせ',
+      '今日の天気予報は晴れ',
+      new LiIE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder('明日の天気', 'tomorrow'),
+      new LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder('週末の天気', 'weekend'),
+      new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder('webで見る', 'https://google.jp')
+    );
   }
 
   // テキスト返信用関数
   function replyTextMessage($bot, $replyToken, $text) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($text));
-
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
@@ -60,7 +72,6 @@
   // イメージ返信用関数
   function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUrl) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($originalImageUrl, $previewImageUrl));
-
     if(!$response->isSucceeded()) {
       error_log('Failed! '. $response->getHTTPStatus. ' '. $response->getRawBody());
     }
@@ -69,15 +80,14 @@
   // 位置情報返信用関数
   function replyLocationMessage($bot, $replyToken, $title, $address, $lat, $lon) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\LocationMessageBuilder($title, $address, $lat, $lon));
-
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
   }
+
   // スタンプ返信用関数
   function replyStickerMessage($bot, $replyToken, $packageId, $stickerId) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($packageId, $stickerId));
-
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
@@ -86,7 +96,6 @@
   // 動画返信用関数
   function replyVideoMessage($bot, $replyToken, $originalContentUrl, $previewImageUrl) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\VideoMessageBuilder($originalContentUrl, $previewImageUrl));
-
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
@@ -95,7 +104,6 @@
   // オーディオ返信用関数
   function replyAudioMessage($bot, $replyToken, $originalContentUrl, $audioLength) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\AudioMessageBuilder($originalContentUrl, $audioLength));
-
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
@@ -108,7 +116,27 @@
     foreach($msgs as $value) {
       $builder->add($value);
     }
+    $response = $bot->replyMessage($replyToken, $builder);
+    if(!$response->isSucceeded()) {
+      error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
 
+  // Buttonテンプレート返信用関数
+  function replyButtonTemplate($bot, $replyToken, $alternativeText,
+                                      $imageUrl, $title, $text, ...$actions) {
+    // アクションを格納する配列
+    $actionArray = array();
+    // アクションを配列に格納
+    foreach($actions as $value) {
+      array_push($actionArray, $value);
+    }
+    $builder = new \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+      $alternativeText,
+      new \LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder(
+        $title, $text, $imageUrl, $actionArray
+      )
+    );
     $response = $bot->replyMessage($replyToken, $builder);
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
