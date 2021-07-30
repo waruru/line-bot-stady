@@ -38,7 +38,7 @@
 
     // オーディオを返信
     replyAudioMessage($bot, $event->getReplyToken(),
-                          'https://' . $_SERVER['HTTP_HOST'] . '/audios/sample2.m4a', 24400);
+                          'https://' . $_SERVER['HTTP_HOST'] . '/audios/sample2.m4a', 244000);
   }
 
   // テキスト返信用関数
