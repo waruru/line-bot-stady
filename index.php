@@ -34,7 +34,7 @@
     // 動画を返信
     replyVideoMessage($bot, $event->getReplyToken(),
                           'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.mp4',
-                          'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.jpg')
+                          'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.jpg');
   }
 
   // テキスト返信用関数
