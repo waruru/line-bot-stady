@@ -32,9 +32,13 @@
     // replyStickerMessage($bot, $event->getReplyToken(), 11538, 51626498);
 
     // 動画を返信
-    replyVideoMessage($bot, $event->getReplyToken(),
-                          'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.mp4',
-                          'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.jpg');
+    // replyVideoMessage($bot, $event->getReplyToken(),
+    //                       'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.mp4',
+    //                       'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.jpg');
+
+    // オーディオを返信
+    replyAudioMessage($bot, $event->getReplyToken(),
+                          'https://' . $_SERVER['HTTP_HOST'] . '/audios/sample2.m4a', 24400);
   }
 
   // テキスト返信用関数
@@ -75,6 +79,15 @@
   // 動画返信用関数
   function replyVideoMessage($bot, $replyToken, $originalContentUrl, $previewImageUrl) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\VideoMessageBuilder($originalContentUrl, $previewImageUrl));
+
+    if(!$response->isSucceeded()) {
+      error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
+
+  // オーディオ返信用関数
+  function replyAudioMessage($bot, $replyToken, $originalContentUrl, $audioLength) {
+    $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\AudioMessageBuilder($originalContentUrl, $audioLength));
 
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
