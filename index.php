@@ -37,8 +37,15 @@
     //                       'https://' . $_SERVER['HTTP_HOST'] . '/videos/sample.jpg');
 
     // オーディオを返信
-    replyAudioMessage($bot, $event->getReplyToken(),
-                          'https://' . $_SERVER['HTTP_HOST'] . '/audios/sample2.m4a', 244000);
+    // replyAudioMessage($bot, $event->getReplyToken(),
+    //                       'https://' . $_SERVER['HTTP_HOST'] . '/audios/sample2.m4a', 244000);
+
+    // 複数のメッセージを返信
+    replyMultiMessage($bot, $event->getReplyToken(),
+        new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('返信テスト'),
+        new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder('https://' . $_SERVER['HTTP_HOST'] . '/imgs/original.jpg',
+                                                              'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg'),
+        new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(11538, 51626498));
   }
 
   // テキスト返信用関数
@@ -89,6 +96,20 @@
   function replyAudioMessage($bot, $replyToken, $originalContentUrl, $audioLength) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\AudioMessageBuilder($originalContentUrl, $audioLength));
 
+    if(!$response->isSucceeded()) {
+      error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
+
+  // 複数のメッセージ返信用関数
+  function replyMultiMessage($bot, $replyToken, ...$msgs) {
+    $builder = new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder();
+    // メッセージを追加
+    foreach($msgs as $value) {
+      $builder->add($value);
+    }
+
+    $response = $bot->replyMessage($replyToken, $builder);
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
