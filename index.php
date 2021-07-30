@@ -29,7 +29,12 @@
     //                       36.5308217, 136.6270967);
 
     // スタンプを返信
-    replyStickerMessage($bot, $event->getReplyToken(), 11538, 51626498);
+    // replyStickerMessage($bot, $event->getReplyToken(), 11538, 51626498);
+
+    // 動画を返信
+    replyVideoMessage($bot, $event->getReplyToken(),
+                          'https://' . $_SERVER['HTTP_HOST'] . '/imgs/original.jpg',
+                          'https://' . $_SERVER['HTTP_HOST'] . '/imgs/preview.jpg')
   }
 
   // テキスト返信用関数
@@ -61,6 +66,15 @@
   // スタンプ返信用関数
   function replyStickerMessage($bot, $replyToken, $packageId, $stickerId) {
     $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder($packageId, $stickerId));
+
+    if(!$response->isSucceeded()) {
+      error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
+
+  // 動画返信用関数
+  function replyVideoMessage($bot, $replyToken, $originalContentUrl, $previewImageUrl) {
+    $response = $bot->replyMessage($replyToken, new \LINE\LINEBot\MessageBuilder\VideoMessageBuilder($originalContentUrl, $previewImageUrl));
 
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
