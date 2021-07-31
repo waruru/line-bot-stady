@@ -163,15 +163,20 @@
   }
 
   // Confirmテンプレート返信用関数
-  function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray) {
+  function replyConfirmTemplate($bot, $replyToken, $alternativeText, $text, ...$actions) {
+    $actionArray = array();
+    foreach($actions as $value) {
+      array_push($actionArray, $value);
+    }
     $builder = new \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
       $alternativeText,
-      // Carouselテンプレートの引数はダイアログの配列
-      new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder ($columnArray)
+      // Confirmテンプレートの引数はテキスト、アクションの配列
+      new \LINE\LINEBot\MessageBuilder\TemplateBuilder\ConfirmTemplateBuilder ($text, $actionArray)
     );
     $response = $bot->replyMessage($replyToken, $builder);
     if (!$response->isSucceeded()) {
       error_log('Failed!'. $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
   }
+  
 ?>
