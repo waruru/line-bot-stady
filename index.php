@@ -108,27 +108,37 @@
 
     // Carouselテンプレートメッセージを返信
     // ダイアログの配列
-    $columnArray = array();
-    for($i = 0; $i < 5; $i++) {
-      // アクションの配列
-      $actionArray = array();
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-        'ボタン' . $i . '-' . 1, 'c-' . $i . '-' . 1));
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-        'ボタン' . $i . '-' . 2, 'c-' . $i . '-' . 2));
-      array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
-        'ボタン' . $i . '-' . 3, 'c-' . $i . '-' . 3));
-      // CarouselColumnTemplateBuilderの引数はタイトル、本文、
-      // 画像URL、アクションの配列
-      $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
-        ($i + 1) . '日後の天気',
-        '晴れ',
-        'https://' . $_SERVER['HTTP_HOST'] .  '/imgs/template.jpg',
-        $actionArray
-      );
-      // 配列に追加
-      array_push($columnArray, $column);
-    }
-    replyCarouselTemplate($bot, $event->getReplyToken(),'今後の天気予報', $columnArray);
+    // $columnArray = array();
+    // for($i = 0; $i < 5; $i++) {
+    //   // アクションの配列
+    //   $actionArray = array();
+    //   array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+    //     'ボタン' . $i . '-' . 1, 'c-' . $i . '-' . 1));
+    //   array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+    //     'ボタン' . $i . '-' . 2, 'c-' . $i . '-' . 2));
+    //   array_push($actionArray, new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+    //     'ボタン' . $i . '-' . 3, 'c-' . $i . '-' . 3));
+    //   // CarouselColumnTemplateBuilderの引数はタイトル、本文、
+    //   // 画像URL、アクションの配列
+    //   $column = new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselColumnTemplateBuilder (
+    //     ($i + 1) . '日後の天気',
+    //     '晴れ',
+    //     'https://' . $_SERVER['HTTP_HOST'] .  '/imgs/template.jpg',
+    //     $actionArray
+    //   );
+    //   // 配列に追加
+    //   array_push($columnArray, $column);
+    // }
+    // replyCarouselTemplate($bot, $event->getReplyToken(),'今後の天気予報', $columnArray);
+
+    // ユーザーのプロフィールを取得しメッセージを作成後返信
+    $profile = $bot->getProfile($event->getUserId())->getJSONDecodedBody();
+    $bot->replyMessage($event->getReplyToken(),
+      (new \LINE\LINEBot\MessageBuilder\MultiMessageBuilder())
+        ->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('現在のプロフィールです。'))
+        ->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('表示名：' . $profile['displayName']))
+        ->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('画像URL：' . $profile['pictureUrl']))
+        ->add(new \LINE\LINEBot\MessageBuilder\TextMessageBuilder('ステータスメッセージ：' . $profile['statusMessage']))
+    );
   }
 ?>
