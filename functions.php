@@ -100,4 +100,18 @@
       error_log('Failed!'. $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
   }
+
+  // Carouselテンプレート返信用関数。引数はLINEBot、返信先、代替テキスト、ダイアログの配列
+  function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray) {
+    $builder = new \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+    $alternativeText,
+    // Carouselテンプレートの引数はダイアログの配列
+    new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder (
+      $columnArray)
+    );
+    $response = $bot->replyMessage($replyToken, $builder);
+    if (!$response->isSucceeded()) {
+      error_log('Failed!'. $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
 ?>
