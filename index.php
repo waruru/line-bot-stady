@@ -19,6 +19,10 @@
       replyTextMessage($bot, $event->getReplyToken(), 'Postback受信「' . $event->getPostbackData() . '」');
       continue;
     }
+    if ($event instanceof \LINE\LINEBot\Event\FollowEvent) {
+      replyTextMessage($bot, $event->getReplyToken(), "Follow受信\nフォローありがとうございます");
+      continue;
+    }
     // テキストを返信
     // replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
 
@@ -144,6 +148,19 @@
     $response = $bot->replyMessage($replyToken, $builder);
     if(!$response->isSucceeded()) {
       error_log('Failed! ' . $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+  }
+
+  // Confirmテンプレート返信用関数
+  function replyCarouselTemplate($bot, $replyToken, $alternativeText, $columnArray) {
+    $builder = new \LINE\LINEBot\MessageBuilder\TemplateMessageBuilder(
+      $alternativeText,
+      // Carouselテンプレートの引数はダイアログの配列
+      new \LINE\LINEBot\MessageBuilder\TemplateBuilder\CarouselTemplateBuilder ($columnArray)
+    );
+    $response = $bot->replyMessage($replyToken, $builder);
+    if (!$response->isSucceeded()) {
+      error_log('Failed!'. $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
   }
 ?>
