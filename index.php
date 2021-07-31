@@ -55,16 +55,28 @@
     //     new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(11538, 51626498));
 
     // Buttonテンプレートメッセージを返信
-    replyButtonTemplate(
+    // replyButtonTemplate(
+    //   $bot,
+    //   $event->getReplyToken(),
+    //   '天気のお知らせ - 今日の天気予報',
+    //   'https://' . $_SERVER['HTTP_HOST'] . '/imgs/template.jpg',
+    //   '天気の知らせ',
+    //   '今日の天気予報は晴れ',
+    //   new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder ('明日の天気', 'tomorrow'),
+    //   new LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder('週末の天気', 'weekend'),
+    //   new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder('webで見る', 'https://google.jp')
+    // );
+
+    // Confirmテンプレートを返信
+    replyConfirmTemplate(
       $bot,
       $event->getReplyToken(),
-      '天気のお知らせ - 今日の天気予報',
-      'https://' . $_SERVER['HTTP_HOST'] . '/imgs/template.jpg',
-      '天気の知らせ',
-      '今日の天気予報は晴れ',
-      new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder ('明日の天気', 'tomorrow'),
-      new LINE\LINEBot\TemplateActionBuilder\PostbackTemplateActionBuilder('週末の天気', 'weekend'),
-      new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder('webで見る', 'https://google.jp')
+      'webで詳しく見ますか?',
+      'webで詳しく見ますか?',
+      new LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder (
+        '見る', 'http://google.jp'),
+      new LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder (
+        '見ない', 'ignore')
     );
   }
 
