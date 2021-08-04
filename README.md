@@ -1,4 +1,4 @@
-# line-bot-stady
+# line-bot-study
 テンプレートがまとめてあるだけです
 
 ## 友達追加用のQRコード
