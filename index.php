@@ -39,5 +39,5 @@ foreach ($events as $event) {
   // オウム返し
   $bot->replyText($event->getReplyToken(), $event->getText());
 
-  error_log($event);
+  error_log((string)$event);
 }
